@@ -2,14 +2,14 @@ require("dotenv").config();
 
 var Spotify = require('node-spotify-api');
 var keys = require("./javascript/keys.js")
-var fs = require("fs");
-
-var request = require("request");
-var movieName = process.argv[2];
-
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+// var fs = require("fs");
 
 
+// this for the movie api 
+// var omdb = require('omdb');
+// var movieName = process.argv[2];
+
+// var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
 
 function init() {
@@ -33,7 +33,6 @@ function init() {
 
 function spotify(song) {
 
-
     var spotify = new Spotify({
         id: keys.spotify.id,
         secret: keys.spotify.secret,
@@ -42,6 +41,7 @@ function spotify(song) {
     spotify.search({
         type: 'track',
         query: song,
+        release_date: " ",
     }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
@@ -52,10 +52,31 @@ function spotify(song) {
         console.log(data.tracks.items[0].album.name)
     });
 
-}
+};
 
-function movies() {
+// function movie() {
 
-}
+//     omdb.search('saw', function(err, movies) {
+//         if(err) {
+//             return console.error(err);
+//         }
+
+//         if(movies.length < 1) {
+//             return console.log('No movies were found!');
+//         }
+
+//         movies.forEach(function(movie) {
+//             console.log('%s (%d)', movie.title, movie.year);
+//         });
+
+//         // Saw (2004)
+//         // Saw II (2005)
+//         // Saw III (2006)
+//         // Saw IV (2007)
+//         // ...
+//     });
+
+
+// }
 
 init()
