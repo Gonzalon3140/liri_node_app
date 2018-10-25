@@ -84,33 +84,33 @@ function movie(m) {
         console.log("Plot of the Movie: " + parsedBody.Plot);
         console.log("Actors of the Movie: " + parsedBody.Actors);
     });
+}
 
-    function band(artists) {
+function band(artists) {
 
-        var Url = ("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp");
-        var parsedBody;
+    var Url = ("https://rest.bandsintown.com/artists/def/events?app_id=codingbootcamp");
+    var parsedBody;
 
-        request(Url, function (error, response, body) {
-            // console.log('error:', error); // Print the error if one occurred
-            // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-            // console.log('body:', body); // Print the HTML for the Google homepage.
+    request(Url, function (error, response, body) {
+        // console.log('error:', error); // Print the error if one occurred
+        // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        // console.log('body:', body); // Print the HTML for the Google homepage.
+        // parsedBody = JSON.parse(body);
 
-            parsedBody = JSON.parse(body);
-
-            // console.log(parsedBody);
-            console.log("Title: " + parsedBody.Title);
-            console.log("Year: " + parsedBody.Year);
-            console.log("Imdb: " + parsedBody.imdbRating);
-            console.log("Rotten Tomatoes: " + parsedBody.Ratings[1].Value);
-            console.log("Production Country: " + parsedBody.Country);
-            console.log("Language of Movie: " + parsedBody.Language);
-            console.log("Plot of the Movie: " + parsedBody.Plot);
-            console.log("Actors of the Movie: " + parsedBody.Actors);
-        });
-
-
-    }
+        // // console.log(parsedBody);
+        console.log(JSON.parse(body)[0].artist_id);
+        // console.log("Year: " + parsedBody.Year);
+        // console.log("Imdb: " + parsedBody.imdbRating);
+        // console.log("Rotten Tomatoes: " + parsedBody.Ratings[1].Value);
+        // console.log("Production Country: " + parsedBody.Country);
+        // console.log("Language of Movie: " + parsedBody.Language);
+        // console.log("Plot of the Movie: " + parsedBody.Plot);
+        // console.log("Actors of the Movie: " + parsedBody.Actors);
+    });
 
 
-};
-init()
+}
+
+
+band()
+// init()
