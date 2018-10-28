@@ -1,17 +1,14 @@
 require("dotenv").config();
 var request = require("request");
-
 var omdb = require("omdb");
-
 var Spotify = require("node-spotify-api");
 var keys = require("./javascript/keys.js");
-// var fs = require("fs");
-
-// var bandList = require("./bands.js");
+var moment = require("moment");
+var fs = require("fs");
 
 function init() {
   switch (process.argv[2]) {
-    case "spotify-this-song":
+    case "spotify-this":
       spotify(process.argv.slice(3).join(" "));
       break;
     case "movies-this":
@@ -44,7 +41,6 @@ function spotify(song) {
         return console.log("Error occurred: " + err);
       }
 
-
       console.log(data.tracks.items[0]);
       console.log(data.tracks.items[0].album.name);
       console.log(data.tracks.items[0].album.release_date);
@@ -64,13 +60,8 @@ function movie(m) {
   var parsedBody;
 
   request(Url, function (error, response, body) {
-    // console.log('error:', error); // Print the error if one occurred
-    // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-    // console.log('body:', body); // Print the HTML for the Google homepage.
-
     parsedBody = JSON.parse(body);
 
-    // console.log(parsedBody);
     console.log("Title: " + parsedBody.Title);
     console.log("Year: " + parsedBody.Year);
     console.log("Imdb: " + parsedBody.imdbRating);
@@ -83,33 +74,44 @@ function movie(m) {
 }
 
 function band(bandName) {
-
-  if (bandName == null || bandName == "") {
-    bandName = 'They Might Be giants';
-
-  }
-
-  // console.log("bn: " + bandName);
-
-  var queryUrl = "https://rest.bandsintown.com/artists/" + bandName + "/events?app_id=codingbootcamp";
+  // if (bandName == null || bandName == "") {
+  //   bandName = "";
+  // }
+  var queryUrl =
+    "https://rest.bandsintown.com/artists/" +
+    bandName +
+    "/events?app_id=codingbootcamp";
 
   var parsedBody;
 
   request(queryUrl, function (error, response, body) {
-
     // If the request is successful
     if (!error && response.statusCode === 200) {
-
       parsedBody = JSON.parse(body);
 
+      console.log(parsedBody);
+      console.log("Venue Name: " + parsedBody[0].venue.name);
+      console.log("Venue location: " + parsedBody[0].venue.country);
+      console.log("Date of the Event: " + moment(parsedBody[0].datetime).format('MM/DD/YYYY'));
+    }
+  });
+};
 
-      // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
-      // console.log("Venue Name: " + parsedBody[0].venue.name);
-      // console.log("Venue Location: " + parsedBody[0].venue.city);
-      // console.log("Date of Event: " + parsedBody[0].datetime);
-      console.log(bandName)
+function doIt() {
+
+  fs.readFile("random.text", function (err, data) {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log("random.text" + data.toString());
     }
   });
 }
+
+
+
+// var data = fs.readFileSync("random.txt")
+// console.log("Sync data is" + data.toString());
+
 
 init();
