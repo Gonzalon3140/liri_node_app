@@ -4,7 +4,6 @@ var omdb = require("omdb");
 var Spotify = require("node-spotify-api");
 var keys = require("./javascript/keys.js");
 var moment = require("moment");
-var fs = require("fs");
 
 function init() {
   switch (process.argv[2]) {
@@ -14,7 +13,7 @@ function init() {
     case "movies-this":
       movie(process.argv[3]);
       break;
-    case "band-this":
+    case "concert-this":
       band(process.argv[3]);
       break;
     case "do-what-i-say":
@@ -26,22 +25,26 @@ function init() {
 }
 
 function spotify(song) {
+  if (song == null || song == "") {
+    song = "The Sign";
+  }
   var spotify = new Spotify({
     id: keys.spotify.id,
     secret: keys.spotify.secret
   });
 
-  spotify.search({
+  spotify.search(
+    {
       type: "track",
       query: song,
       release_date: " "
     },
-    function (err, data) {
+    function(err, data) {
       if (err) {
         return console.log("Error occurred: " + err);
       }
 
-      console.log(data.tracks.items[0]);
+      // console.log(data.tracks.items[0]);
       console.log(data.tracks.items[0].album.name);
       console.log(data.tracks.items[0].album.release_date);
       console.log(data.tracks.items[0].album.artists[0].name);
@@ -59,7 +62,7 @@ function movie(m) {
 
   var parsedBody;
 
-  request(Url, function (error, response, body) {
+  request(Url, function(error, response, body) {
     parsedBody = JSON.parse(body);
 
     console.log("Title: " + parsedBody.Title);
@@ -74,9 +77,9 @@ function movie(m) {
 }
 
 function band(bandName) {
-  // if (bandName == null || bandName == "") {
-  //   bandName = "";
-  // }
+  if (bandName == null || bandName == "") {
+    bandName = "";
+  }
   var queryUrl =
     "https://rest.bandsintown.com/artists/" +
     bandName +
@@ -84,34 +87,35 @@ function band(bandName) {
 
   var parsedBody;
 
-  request(queryUrl, function (error, response, body) {
+  request(queryUrl, function(error, response, body) {
     // If the request is successful
     if (!error && response.statusCode === 200) {
       parsedBody = JSON.parse(body);
 
-      console.log(parsedBody);
+      // console.log(parsedBody);
       console.log("Venue Name: " + parsedBody[0].venue.name);
       console.log("Venue location: " + parsedBody[0].venue.country);
-      console.log("Date of the Event: " + moment(parsedBody[0].datetime).format('MM/DD/YYYY'));
-    }
-  });
-};
-
-function doIt() {
-
-  fs.readFile("random.text", function (err, data) {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log("random.text" + data.toString());
+      console.log(
+        "Date of the Event: " +
+          moment(parsedBody[0].datetime).format("MM/DD/YYYY")
+      );
     }
   });
 }
 
+function doIt() {
+  fs = require("fs");
+  fs.writeFile("movies.txt", "movies-this", function(err) {
+    if (err) return console.log(err);
+    console.log("movies-this Inception> movies.txt");
+  });
 
+  // fs.appendFile("random.text", "data to append", err => {
+  //   if (err) throw err;
+  //   console.log('The "data to append" was appended to file!');
+  // });
+}
 
-// var data = fs.readFileSync("random.txt")
-// console.log("Sync data is" + data.toString());
+doIt();
 
-
-init();
+// init();
