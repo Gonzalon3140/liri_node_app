@@ -65,6 +65,7 @@ function movie(m) {
   request(Url, function (error, response, body) {
     parsedBody = JSON.parse(body);
 
+    // console.log(parsedBody);
     console.log("Title: " + parsedBody.Title);
     console.log("Year: " + parsedBody.Year);
     console.log("Imdb: " + parsedBody.imdbRating);
