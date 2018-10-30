@@ -4,10 +4,11 @@ var omdb = require("omdb");
 var Spotify = require("node-spotify-api");
 var keys = require("./javascript/keys.js");
 var moment = require("moment");
+var fs = require("fs");
 
 function init() {
   switch (process.argv[2]) {
-    case "spotify-this":
+    case "spotify-this-song":
       spotify(process.argv.slice(3).join(" "));
       break;
     case "movies-this":
@@ -33,13 +34,12 @@ function spotify(song) {
     secret: keys.spotify.secret
   });
 
-  spotify.search(
-    {
+  spotify.search({
       type: "track",
       query: song,
       release_date: " "
     },
-    function(err, data) {
+    function (err, data) {
       if (err) {
         return console.log("Error occurred: " + err);
       }
@@ -62,7 +62,7 @@ function movie(m) {
 
   var parsedBody;
 
-  request(Url, function(error, response, body) {
+  request(Url, function (error, response, body) {
     parsedBody = JSON.parse(body);
 
     console.log("Title: " + parsedBody.Title);
@@ -87,7 +87,7 @@ function band(bandName) {
 
   var parsedBody;
 
-  request(queryUrl, function(error, response, body) {
+  request(queryUrl, function (error, response, body) {
     // If the request is successful
     if (!error && response.statusCode === 200) {
       parsedBody = JSON.parse(body);
@@ -97,15 +97,14 @@ function band(bandName) {
       console.log("Venue location: " + parsedBody[0].venue.country);
       console.log(
         "Date of the Event: " +
-          moment(parsedBody[0].datetime).format("MM/DD/YYYY")
+        moment(parsedBody[0].datetime).format("MM/DD/YYYY")
       );
     }
   });
 }
 
 function doIt() {
-  fs = require("fs");
-  fs.writeFile("movies.txt", "movies-this", function(err) {
+  fs.writeFile("movies.txt", "movies-this", function (err) {
     if (err) return console.log(err);
     console.log("movies-this Inception> movies.txt");
   });
@@ -116,6 +115,6 @@ function doIt() {
   // });
 }
 
-doIt();
+// doIt();
 
-// init();
+init();
