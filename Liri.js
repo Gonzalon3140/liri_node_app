@@ -34,12 +34,13 @@ function spotify(song) {
     secret: keys.spotify.secret
   });
 
-  spotify.search({
+  spotify.search(
+    {
       type: "track",
       query: song,
       release_date: " "
     },
-    function (err, data) {
+    function(err, data) {
       if (err) {
         return console.log("Error occurred: " + err);
       }
@@ -62,7 +63,7 @@ function movie(m) {
 
   var parsedBody;
 
-  request(Url, function (error, response, body) {
+  request(Url, function(error, response, body) {
     parsedBody = JSON.parse(body);
 
     // console.log(parsedBody);
@@ -88,7 +89,7 @@ function band(bandName) {
 
   var parsedBody;
 
-  request(queryUrl, function (error, response, body) {
+  request(queryUrl, function(error, response, body) {
     // If the request is successful
     if (!error && response.statusCode === 200) {
       parsedBody = JSON.parse(body);
@@ -98,24 +99,31 @@ function band(bandName) {
       console.log("Venue location: " + parsedBody[0].venue.country);
       console.log(
         "Date of the Event: " +
-        moment(parsedBody[0].datetime).format("MM/DD/YYYY")
+          moment(parsedBody[0].datetime).format("MM/DD/YYYY")
       );
     }
   });
 }
 
+//This will read a block of code from "random.txt" and run the fuction.
 function doIt() {
-  fs.writeFile("movies.txt", "movies-this", function (err) {
-    if (err) return console.log(err);
-    console.log("movies-this Inception> movies.txt");
+  // The code will store the contents of the reading inside the variable "data"
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    // If the code experiences any errors it will log the error to the console.
+    if (error) {
+      return console.log(error);
+    }
+
+    // We will then print the contents of data
+    // console.log(data);
+
+    // Then split it by commas (to make it more readable)
+    var dataArr = data.split(",");
+
+    // We will then re-display the content as an array for later use.
+    //console.log(dataArr);
+    spotify(dataArr[1]);
   });
-
-  // fs.appendFile("random.text", "data to append", err => {
-  //   if (err) throw err;
-  //   console.log('The "data to append" was appended to file!');
-  // });
 }
-
-// doIt();
 
 init();
